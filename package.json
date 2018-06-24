@@ -1,0 +1,20 @@
+{
+  "name": "plex-client",
+  "version": "0.1.0",
+  "description": "APIs for a client application to access Plex media servers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "keywords": [
+    "plex",
+    "client",
+    "api",
+    "promise"
+  ],
+  "author": "Dave Townsend <dtownsend@oxymoronical.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.0.0"
+  }
+}
