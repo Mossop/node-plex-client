@@ -4,7 +4,7 @@ const request = require("request-promise-native");
 const xml2js = require("xml2js");
 
 const PLEX_URL_SIGNIN = "https://plex.tv/users/sign_in.xml";
-const PLEX_URL_DEVICES = "https://plex.tv/devices.xml";
+const PLEX_URL_RESOURCES = "https://plex.tv/api/resources?includeHttps=1&includeRelay=1";
 
 const parseXML = util.promisify(xml2js.parseString);
 
@@ -41,6 +41,7 @@ class PlexConnection {
       resolveWithFullResponse: true,
       auth,
       headers,
+      timeout: 2000,
     });
 
     return parseXML(response.body);
@@ -52,8 +53,12 @@ class PlexConnection {
     return result;
   }
 
-  getDevices() {
-    return this.request(PLEX_URL_DEVICES);
+  getResources() {
+    return this.request(PLEX_URL_RESOURCES);
+  }
+
+  getDevice(baseuri) {
+    return this.request(baseuri);
   }
 }
 

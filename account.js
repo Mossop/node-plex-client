@@ -6,26 +6,32 @@ class PlexAccount {
     this.data = data;
   }
 
-  async getDevice(name) {
-    let devices = await this.getDevices();
-    for (let device of devices) {
-      if (device.name == name) {
-        return device;
+  async getResource(name) {
+    let data = await this.connection.getResources();
+    for (let deviceData of data.MediaContainer.Device) {
+      if (deviceData.$.name != name) {
+        continue;
       }
+
+      return PlexDevice.connect(this.connection, deviceData);
     }
+
+    return null;
   }
 
-  async getDevices(provides = []) {
-    let devices = [];
-    let data = await this.connection.getDevices();
+  async getResources(provides = []) {
+    let connectPromises = [];
+    let data = await this.connection.getResources();
     for (let deviceData of data.MediaContainer.Device) {
-      let device = new PlexDevice(deviceData);
-      if (device.provides(provides)) {
-        devices.push(device);
+      if (!PlexDevice.checkProvides(deviceData.$.provides, provides)) {
+        continue;
       }
+
+      connectPromises.push(PlexDevice.connect(this.connection, deviceData).catch(() => null));
     }
 
-    return devices;
+    let connections = await Promise.all(connectPromises);
+    return connections.filter(d => d);
   }
 }
 
