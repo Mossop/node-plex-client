@@ -1,3 +1,5 @@
+const { URL } = require("url");
+
 class PlexDirectory {
   constructor(connection, baseuri, data) {
     this.connection = connection;
@@ -8,6 +10,12 @@ class PlexDirectory {
   get name() {
     return this.data.$.title;
   }
+
+  async getContainer() {
+    let url = new URL(this.data.$.key, this.baseuri);
+    let containerData = await this.connection.request(url);
+    return new PlexContainer(this.connection, url, containerData.MediaContainer);
+  }
 }
 
 class PlexContainer {
@@ -17,6 +25,14 @@ class PlexContainer {
     this.data = data;
   }
 
+  get name() {
+    return this.data.$.title || this.data.$.title1;
+  }
+
+  get art() {
+    return this.data.$.art;
+  }
+
   get directories() {
     return this.data.Directory.map(d => new PlexDirectory(this.container, this.baseuri, d));
   }
@@ -24,7 +40,7 @@ class PlexContainer {
   getDirectoryByName(name) {
     let dirs = this.data.Directory.filter(d => d.$.title == name);
     if (dirs.length == 1) {
-      return new PlexDirectory(this.container, this.baseuri, dirs[0]);
+      return new PlexDirectory(this.connection, this.baseuri, dirs[0]);
     } else {
       return null;
     }
@@ -35,4 +51,7 @@ class PlexContainer {
   }
 }
 
-module.exports = PlexContainer;
+module.exports = {
+  PlexDirectory,
+  PlexContainer,
+};

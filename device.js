@@ -1,4 +1,6 @@
-const PlexContainer = require("./container");
+const { URL } = require("url");
+
+const { PlexDirectory, PlexContainer } = require("./container");
 
 function sortConnections(a, b) {
   if (a.relay != b.relay) {
@@ -31,7 +33,7 @@ class PlexDevice extends PlexContainer {
     }
 
     let connections = resourceData.Connection.map(c => ({
-      uri: c.$.uri,
+      uri: new URL(c.$.uri),
       local: c.$.local == "1",
       relay: c.$.relay == "1",
     })).sort(sortConnections);
@@ -67,7 +69,12 @@ class PlexDevice extends PlexContainer {
 
 class PlexServer extends PlexDevice {
   get library() {
-    return this.getDirectoryByName("library");
+    return new PlexDirectory(this.connection, this.baseuri, {
+      $: {
+        title: "Library Sections",
+        key: "library/sections",
+      },
+    });
   }
 }
 

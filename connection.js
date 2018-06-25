@@ -1,10 +1,11 @@
 const util = require("util");
+const { URL } = require("url");
 
 const request = require("request-promise-native");
 const xml2js = require("xml2js");
 
-const PLEX_URL_SIGNIN = "https://plex.tv/users/sign_in.xml";
-const PLEX_URL_RESOURCES = "https://plex.tv/api/resources?includeHttps=1&includeRelay=1";
+const PLEX_URL_SIGNIN = new URL("https://plex.tv/users/sign_in.xml");
+const PLEX_URL_RESOURCES = new URL("https://plex.tv/api/resources?includeHttps=1&includeRelay=1");
 
 const parseXML = util.promisify(xml2js.parseString);
 
@@ -37,7 +38,7 @@ class PlexConnection {
     let headers = this.getHeaders();
 
     let response = await method({
-      url,
+      url: url.toString(),
       resolveWithFullResponse: true,
       auth,
       headers,
