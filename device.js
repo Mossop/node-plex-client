@@ -1,4 +1,4 @@
-const { setTimeout } = require("timers");
+const PlexContainer = require("./container");
 
 function sortConnections(a, b) {
   if (a.relay != b.relay) {
@@ -12,20 +12,25 @@ function sortConnections(a, b) {
   return 0;
 }
 
-class PlexDevice {
-  constructor(connection, baseuri, data, deviceData) {
-    this.connection = connection;
-    this.baseuri = baseuri;
-    this.data = data;
-    this.deviceData = deviceData;
+class PlexDevice extends PlexContainer {
+  constructor(connection, baseuri, data, resourceData) {
+    super(connection, baseuri, data);
+    this.resourceData = resourceData;
   }
 
   get name() {
     return this.deviceData.$.friendlyName;
   }
 
-  static async connect(connection, data) {
-    let connections = data.Connection.map(c => ({
+  static async connect(connection, resourceData) {
+    let cls = PlexDevice;
+    if (PlexDevice.checkProvides(resourceData.$.provides, ["server"])) {
+      cls = PlexServer;
+    } else if (PlexDevice.checkProvides(resourceData.$.provides, ["client"])) {
+      cls = PlexClient;
+    }
+
+    let connections = resourceData.Connection.map(c => ({
       uri: c.$.uri,
       local: c.$.local == "1",
       relay: c.$.relay == "1",
@@ -34,13 +39,13 @@ class PlexDevice {
     for (let conn of connections) {
       try {
         let deviceData = await connection.getDevice(conn.uri);
-        return new PlexDevice(connection, conn.uri, data, deviceData.MediaContainer);
+        return new cls(connection, conn.uri, deviceData.MediaContainer, resourceData);
       } catch (e) {
         // Ignore failures to connect
       }
     }
 
-    throw new Error(`Unable to connect to device "${data.$.name}".`);
+    throw new Error(`Unable to connect to device "${resourceData.$.name}".`);
   }
 
   static checkProvides(deviceProvides, provides = []) {
@@ -58,6 +63,15 @@ class PlexDevice {
 
     return true;
   }
+}
+
+class PlexServer extends PlexDevice {
+  get library() {
+    return this.getDirectoryByName("library");
+  }
+}
+
+class PlexClient extends PlexDevice {
 }
 
 module.exports = PlexDevice;
