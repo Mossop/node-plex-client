@@ -12,7 +12,7 @@ class PlexDirectory {
   }
 
   async getContainer() {
-    let url = new URL(this.data.$.key, this.baseuri);
+    let url = new URL(`${this.data.$.key}/`, this.baseuri);
     let containerData = await this.connection.request(url);
     return new PlexContainer(this.connection, url, containerData.MediaContainer);
   }
@@ -33,8 +33,12 @@ class PlexContainer {
     return this.data.$.art;
   }
 
+  get thumb() {
+    return this.data.$.thumb;
+  }
+
   get directories() {
-    return this.data.Directory.map(d => new PlexDirectory(this.container, this.baseuri, d));
+    return this.data.Directory.map(d => new PlexDirectory(this.connection, this.baseuri, d));
   }
 
   getDirectoryByName(name) {
