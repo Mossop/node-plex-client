@@ -1,7 +1,7 @@
 const os = require("os");
 const crypto = require("crypto");
 
-const pkg = require("./package.json");
+const pkg = require("../package.json");
 const PlexAccount = require("./account");
 const PlexConnection = require("./connection");
 
@@ -44,9 +44,8 @@ class PlexClient {
 
     let data = await this.connection.getDevices();
     let device = data.MediaContainer.Device.find(d => d.$.clientIdentifier == this.options.uuid);
-    console.log(require("util").inspect(device, { depth: null }));
   }
 }
 
-module.exports = { PlexClient };
+module.exports = PlexClient;
 

@@ -8,7 +8,6 @@ class PlexAccount {
 
   async getDevices() {
     let data = this.connection.getDevices();
-    console.log(data);
   }
 
   async getResource(name) {
