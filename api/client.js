@@ -16,17 +16,44 @@ class PlexClient {
     });
 
     Object.assign(this.options, {
-      platform: capitalize(os.platform()),
-      platformVersion: os.release(),
-      provides: ["controller"],
       product: pkg.name,
       version: pkg.version,
+      platform: capitalize(os.platform()),
+      platformVersion: os.release(),
       device: capitalize(os.platform()),
       name: os.hostname(),
       uuid: crypto.createHash("sha1").update(os.hostname()).digest("hex"),
+      provides: ["controller"],
+      screenResolution: "1920x1080",
+    }, options);
+  }
+
+  static Android(options = {}) {
+    let finalOptions = Object.assign({}, {
+      product: "Plex for Android",
+      version: "7.0.4.5618",
+      platform: "Android",
+      platformVersion: "8.1.0",
+      device: "Android",
+      provides: ["controller", "sync-target"],
       screenResolution: "1920x1080 (Mobile)",
       screenDensity: "320",
     }, options);
+
+    return new PlexClient(finalOptions);
+  }
+
+  static WebBrowser(options = {}) {
+    let finalOptions = Object.assign({}, {
+      product: "Plex Web",
+      version: "3.57.1",
+      platform: "Firefox",
+      platformVersion: "63.0",
+      device: "OSX",
+      screenResolution: "1920x1200",
+    }, options);
+
+    return new PlexClient(finalOptions);
   }
 
   async login(username, password) {

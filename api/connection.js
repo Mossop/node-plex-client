@@ -25,8 +25,6 @@ class PlexConnection {
       "X-Plex-Version": this.client.options.version,
       "X-Plex-Device": this.client.options.device,
       "X-Plex-Device-Name": this.client.options.name,
-      "X-Plex-Device-Screen-Resolution": this.client.options.screenResolution,
-      "X-Plex-Device-Screen-Density": this.client.options.screenDensity,
       "X-Plex-Client-Identifier": this.client.options.uuid,
       "X-Plex-Client-Platform": this.client.options.platform,
     };
@@ -37,6 +35,14 @@ class PlexConnection {
 
     if (this.token) {
       headers["X-Plex-Token"] = this.token;
+    }
+
+    if (this.client.options.screenResolution) {
+      headers["X-Plex-Device-Screen-Resolution"] = this.client.options.screenResolution;
+    }
+
+    if (this.client.options.screenDensity) {
+      headers["X-Plex-Device-Screen-Density"] = this.client.options.screenDensity;
     }
 
     return headers;
