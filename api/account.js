@@ -6,6 +6,11 @@ class PlexAccount {
     this.data = data;
   }
 
+  static async login(client, username, password) {
+    let data = await client.connection.getAccount(username, password);
+    return new PlexAccount(client.connection, data);
+  }
+
   async getDevices() {
     let data = this.connection.getDevices();
   }

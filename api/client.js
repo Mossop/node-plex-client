@@ -1,8 +1,8 @@
 const os = require("os");
 const crypto = require("crypto");
+const { URL } = require("url");
 
 const pkg = require("../package.json");
-const PlexAccount = require("./account");
 const PlexConnection = require("./connection");
 
 function capitalize(str) {
@@ -25,7 +25,11 @@ class PlexClient {
       uuid: crypto.createHash("sha1").update(os.hostname()).digest("hex"),
       provides: ["controller"],
       screenResolution: "1920x1080",
+      plexWebURL: new URL("https://plex.tv/")
     }, options);
+
+    Object.freeze(this.options);
+    this.connection = new PlexConnection(this);
   }
 
   static Android(options = {}) {
@@ -54,23 +58,6 @@ class PlexClient {
     }, options);
 
     return new PlexClient(finalOptions);
-  }
-
-  async login(username, password) {
-    Object.freeze(this.options);
-    this.connection = new PlexConnection(this);
-    let data = await this.connection.getAccount(username, password);
-    this.account = new PlexAccount(this.connection, data);
-    return this.account;
-  }
-
-  async getDevice() {
-    if (!this.account) {
-      throw new Error("Must be logged in first.");
-    }
-
-    let data = await this.connection.getDevices();
-    let device = data.MediaContainer.Device.find(d => d.$.clientIdentifier == this.options.uuid);
   }
 }
 
