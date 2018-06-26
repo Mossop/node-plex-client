@@ -6,6 +6,7 @@ const xml2js = require("xml2js");
 
 const PLEX_URL_SIGNIN = new URL("https://plex.tv/users/sign_in.xml");
 const PLEX_URL_RESOURCES = new URL("https://plex.tv/api/resources?includeHttps=1&includeRelay=1");
+const PLEX_URL_DEVICES = new URL("https://plex.tv/devices.xml");
 
 const parseXML = util.promisify(xml2js.parseString);
 
@@ -19,13 +20,20 @@ class PlexConnection {
     let headers = {
       "X-Plex-Platform": this.client.options.platform,
       "X-Plex-Platform-Version": this.client.options.platformVersion,
-      "X-Plex-Provides": this.client.options.provides,
+      "X-Plex-Provides": this.client.options.provides.join(","),
       "X-Plex-Product": this.client.options.product,
       "X-Plex-Version": this.client.options.version,
       "X-Plex-Device": this.client.options.device,
       "X-Plex-Device-Name": this.client.options.name,
+      "X-Plex-Device-Screen-Resolution": this.client.options.screenResolution,
+      "X-Plex-Device-Screen-Density": this.client.options.screenDensity,
       "X-Plex-Client-Identifier": this.client.options.uuid,
+      "X-Plex-Client-Platform": this.client.options.platform,
     };
+
+    if (this.client.options.provides.includes("sync-target")) {
+      headers["X-Plex-Sync-Version"] = "2";
+    }
 
     if (this.token) {
       headers["X-Plex-Token"] = this.token;
@@ -58,8 +66,17 @@ class PlexConnection {
     return this.request(PLEX_URL_RESOURCES);
   }
 
+  getDevices() {
+    return this.request(PLEX_URL_DEVICES);
+  }
+
   getDevice(baseuri) {
     return this.request(baseuri);
+  }
+
+  getSyncStatus(baseuri) {
+    let url = new URL(`/sync/${this.client.options.uuid}/status`, baseuri);
+    return this.request(url);
   }
 }
 

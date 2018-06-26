@@ -37,6 +37,23 @@ class PlexContainer {
     return this.data.$.thumb;
   }
 
+  async getItems() {
+    let items = [];
+
+    for (let prop of Object.keys(this.data)) {
+      if (prop == "$") {
+        return;
+      }
+
+      for (let itemData of this.data[prop]) {
+        let url = new URL(`${itemData.$.key}/`, this.baseuri);
+        items.push(this.device.getItem(url));
+      }
+    }
+
+    return Promise.all(items);
+  }
+
   get directories() {
     return this.data.Directory.map(d => new PlexDirectory(this.connection, this.baseuri, d));
   }

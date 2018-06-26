@@ -1,6 +1,7 @@
 const { URL } = require("url");
 
 const { PlexDirectory, PlexContainer } = require("./container");
+const { PlexSyncItem } = require("./sync");
 
 function sortConnections(a, b) {
   if (a.relay != b.relay) {
@@ -17,11 +18,25 @@ function sortConnections(a, b) {
 class PlexDevice extends PlexContainer {
   constructor(connection, baseuri, data, resourceData) {
     super(connection, baseuri, data);
+    this.device = this;
     this.resourceData = resourceData;
   }
 
   get name() {
-    return this.deviceData.$.friendlyName;
+    return this.data.$.friendlyName;
+  }
+
+  async getItem(uri) {
+    let data = this.connection.request(uri);
+    for (let prop of Object.keys(data)) {
+      for (let itemData of data[prop]) {
+        if (prop == "MediaContainer") {
+          let item = new PlexContainer(this.connection, uri, itemData);
+          item.device = this;
+          return item;
+        }
+      }
+    }
   }
 
   static async connect(connection, resourceData) {
@@ -75,6 +90,11 @@ class PlexServer extends PlexDevice {
         key: "library/sections",
       },
     });
+  }
+
+  async getSyncStatus() {
+    let data = await this.connection.getSyncStatus(this.baseuri);
+    return data.SyncList.SyncItems[0].SyncItem.map(si => new PlexSyncItem(this.connection, this, si));
   }
 }
 

@@ -18,20 +18,33 @@ class PlexClient {
     Object.assign(this.options, {
       platform: capitalize(os.platform()),
       platformVersion: os.release(),
-      provides: "controller,sync-target",
+      provides: ["controller"],
       product: pkg.name,
       version: pkg.version,
       device: capitalize(os.platform()),
       name: os.hostname(),
       uuid: crypto.createHash("sha1").update(os.hostname()).digest("hex"),
+      screenResolution: "1920x1080 (Mobile)",
+      screenDensity: "320",
     }, options);
   }
 
   async login(username, password) {
     Object.freeze(this.options);
-    let connection = new PlexConnection(this);
-    let data = await connection.getAccount(username, password);
-    return new PlexAccount(connection, data);
+    this.connection = new PlexConnection(this);
+    let data = await this.connection.getAccount(username, password);
+    this.account = new PlexAccount(this.connection, data);
+    return this.account;
+  }
+
+  async getDevice() {
+    if (!this.account) {
+      throw new Error("Must be logged in first.");
+    }
+
+    let data = await this.connection.getDevices();
+    let device = data.MediaContainer.Device.find(d => d.$.clientIdentifier == this.options.uuid);
+    console.log(require("util").inspect(device, { depth: null }));
   }
 }
 
