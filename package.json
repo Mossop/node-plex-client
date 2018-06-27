@@ -4,7 +4,7 @@
   "description": "APIs for a client application to access Plex media servers.",
   "main": "index.js",
   "scripts": {
-    "test": "eslint ."
+    "test": "mocha"
   },
   "keywords": [
     "plex",
@@ -15,7 +15,10 @@
   "author": "Dave Townsend <dtownsend@oxymoronical.com>",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^5.0.0"
+    "eslint": "^5.0.0",
+    "expect": "^23.2.0",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
   },
   "dependencies": {
     "request": "^2.87.0",

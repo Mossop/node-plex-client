@@ -11,6 +11,18 @@ class PlexAccount {
     return new PlexAccount(client.connection, data);
   }
 
+  get username() {
+    return this.data.username;
+  }
+
+  get name() {
+    return this.data.title;
+  }
+
+  get email() {
+    return this.data.email;
+  }
+
   async getDevices() {
     let data = this.connection.getDevices();
   }

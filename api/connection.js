@@ -1,14 +1,10 @@
-const util = require("util");
 const { URL } = require("url");
 
 const request = require("request-promise-native");
-const xml2js = require("xml2js");
 
 const PLEX_WEB_SIGNIN = "api/v2/users/signin";
 const PLEX_URL_RESOURCES = new URL("https://plex.tv/api/resources?includeHttps=1&includeRelay=1");
 const PLEX_URL_DEVICES = new URL("https://plex.tv/devices.xml");
-
-const parseXML = util.promisify(xml2js.parseString);
 
 class PlexConnection {
   constructor(client, token) {

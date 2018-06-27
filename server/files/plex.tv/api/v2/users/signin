@@ -1,0 +1,125 @@
+{
+  "id": 853273,
+  "uuid": "8274628273645262",
+  "username": "DTownsend",
+  "title": "Dave Townsend",
+  "email": "foo@bar.com",
+  "locale": null,
+  "emailOnlyAuth": false,
+  "hasPassword": true,
+  "cloudSyncDevice": null,
+  "thumb": "https://plex.tv/users/8274628273645262/avatar?c=1338152355",
+  "authToken": "g2J4yh9G1qwdf292gZdE",
+  "mailingListStatus": "active",
+  "mailingListActive": true,
+  "scrobbleTypes": "",
+  "pin": "588855fc2aa5e861372d891258dd26363536b6113497cc71880552264e7a0f98",
+  "subscription": {
+    "active": true,
+    "status": "Active",
+    "plan": "lifetime",
+    "features": [
+      "webhooks",
+      "camera_upload",
+      "home",
+      "pass",
+      "dvr",
+      "trailers",
+      "session_bandwidth_restrictions",
+      "music_videos",
+      "content_filter",
+      "adaptive_bitrate",
+      "sync",
+      "photo_autotags",
+      "lyrics",
+      "cloudsync",
+      "premium_music_metadata",
+      "hardware_transcoding",
+      "session_kick",
+      "photos-metadata-edition",
+      "collections",
+      "tuner-sharing",
+      "photos-favorites",
+      "hwtranscode",
+      "photosV6-tv-albums",
+      "photosV6-edit",
+      "federated-auth",
+      "item_clusters",
+      "livetv",
+      "Android - PiP",
+      "news",
+      "photos-v5",
+      "unsupportedtuners"
+    ]
+  },
+  "restricted": false,
+  "home": true,
+  "guest": false,
+  "queueEmail": "queue+ztXdTgKC7C5cUHhMiqtY@save.plex.tv",
+  "queueUid": "1ab6fdc15b6998e4",
+  "homeSize": 2,
+  "maxHomeSize": 15,
+  "certificateVersion": 2,
+  "rememberExpiresAt": null,
+  "profile": {
+    "autoSelectAudio": false,
+    "defaultAudioLanguage": "en",
+    "defaultSubtitleLanguage": "xn",
+    "autoSelectSubtitle": 0
+  },
+  "entitlements": [
+    "all",
+    "roku",
+    "android",
+    "xbox_one",
+    "xbox_360",
+    "windows",
+    "windows_phone",
+    "ios"
+  ],
+  "roles": [
+    "plexpass"
+  ],
+  "services": [
+    {
+      "identifier": "eyeq",
+      "endpoint": "https://c4412416.ipg.web.cddbp.net/webapi/xml/1.0/",
+      "token": "6iUU7VrBzA/Hz5nsS9o65Yz77qvh63pYmUN+TaVHeonhsQWlzYGcsik1opEU3toj",
+      "status": "online"
+    },
+    {
+      "identifier": "eyeq-channel-icons",
+      "endpoint": "http://akamai-b.cdn.cddbp.net/cds/2.0/image",
+      "status": "online"
+    },
+    {
+      "identifier": "imagga",
+      "endpoint": "https://api.imagga.com/v1",
+      "token": "AunxEHP5CLc5vu/jsdobovGRXa8Rijd+b35tHpUavpY=",
+      "secret": "XuI9cYEa+ljybVxAU5puuD8jxxA49EMey5xmomcmraKgv6AW2kaFv80dzQnpETm7",
+      "status": "online"
+    },
+    {
+      "identifier": "metadata-provider",
+      "endpoint": "https://mpm.plex.tv/",
+      "status": "online"
+    },
+    {
+      "identifier": "nominatim",
+      "endpoint": "https://locationiq.org/v1",
+      "token": "MLJSTFcm5IurTy3c7juhvvFs0fX0YR6dRjKNAywidVk=",
+      "status": "online"
+    },
+    {
+      "identifier": "tmsapi",
+      "endpoint": "https://tmsapi.plex.tv/v1.1/",
+      "token": "a0VC3zjGN7FmzvlZKIuRRUjLCRoQkgY2jwJsLgi8+OQ=",
+      "status": "online"
+    },
+    {
+      "identifier": "subtitles-search",
+      "endpoint": "https://subtitles.provider.plex.tv/library/match",
+      "status": "online"
+    }
+  ]
+}
