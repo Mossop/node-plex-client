@@ -13,7 +13,7 @@ node-plex-client, a promise based Plex API
 
    classes
 
-This is a promise based Node API for inerracting with Plex Media Servers and
+This is a promise based Node API for interacting with Plex Media Servers and
 Plex accounts. The goal is to include basic browsing and sync functionality but
 it is in its early stages. Do not be surprised by large API changes in the near
 term.
