@@ -23,14 +23,10 @@ class PlexAccount {
     return this.data.email;
   }
 
-  async getDevices() {
-    let data = this.connection.getDevices();
-  }
-
   async getResource(name) {
     let data = await this.connection.getResources();
-    for (let deviceData of data.MediaContainer.Device) {
-      if (deviceData.$.name != name) {
+    for (let deviceData of data.elements.Device) {
+      if (deviceData.attributes.name != name) {
         continue;
       }
 
@@ -43,8 +39,8 @@ class PlexAccount {
   async getResources(provides = []) {
     let connectPromises = [];
     let data = await this.connection.getResources();
-    for (let deviceData of data.MediaContainer.Device) {
-      if (!PlexDevice.checkProvides(deviceData.$.provides, provides)) {
+    for (let deviceData of data.elements.Device) {
+      if (!PlexDevice.checkProvides(deviceData.attributes.provides, provides)) {
         continue;
       }
 

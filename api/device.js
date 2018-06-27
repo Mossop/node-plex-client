@@ -23,7 +23,7 @@ class PlexDevice extends PlexContainer {
   }
 
   get name() {
-    return this.data.$.friendlyName;
+    return this.data.attributes.friendlyName;
   }
 
   async getItem(uri) {
@@ -85,7 +85,7 @@ class PlexDevice extends PlexContainer {
 class PlexServer extends PlexDevice {
   get library() {
     return new PlexDirectory(this.connection, this.baseuri, {
-      $: {
+      attributes: {
         title: "Library Sections",
         key: "library/sections",
       },

@@ -28,7 +28,9 @@ function startServer() {
 }
 
 function stopServer() {
-  server.close();
+  return new Promise(resolve => {
+    server.close(resolve);
+  });
 }
 
 function getLastRequest() {

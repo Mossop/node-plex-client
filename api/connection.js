@@ -2,8 +2,10 @@ const { URL } = require("url");
 
 const request = require("request-promise-native");
 
+const parseXML = require("./xml");
+
 const PLEX_WEB_SIGNIN = "api/v2/users/signin";
-const PLEX_URL_RESOURCES = new URL("https://plex.tv/api/resources?includeHttps=1&includeRelay=1");
+const PLEX_WEB_RESOURCES = "/api/resources?includeHttps=1&includeRelay=1";
 const PLEX_URL_DEVICES = new URL("https://plex.tv/devices.xml");
 
 class PlexConnection {
@@ -45,29 +47,37 @@ class PlexConnection {
     return headers;
   }
 
-  async request(url, { method = request, form = null }) {
+  async request(url, { method = "GET", form = null } = {}) {
     let headers = this.getHeaders();
 
-    let response = await method({
+    let response = await request({
       url: url.toString(),
       resolveWithFullResponse: true,
       headers,
       form,
+      method,
       timeout: 2000,
     });
 
-    return JSON.parse(response.body);
+    let body = response.body;
+    if (response.headers["content-type"] == "application/json") {
+      body = JSON.parse(body);
+    } else {
+      body = await parseXML(body);
+    }
+    return body;
   }
 
   async getAccount(username, password) {
     let url = new URL(PLEX_WEB_SIGNIN, this.client.options.plexWebURL);
-    let result = await this.request(url, { method: request.post, form: { login: username, password }});
-    //this.token = result.user.$.authenticationToken;
+    let result = await this.request(url, { method: "POST", form: { login: username, password }});
+    this.token = result.authToken;
     return result;
   }
 
   getResources() {
-    return this.request(PLEX_URL_RESOURCES);
+    let url = new URL(PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
+    return this.request(url);
   }
 
   getDevices() {

@@ -4,12 +4,8 @@ const expect = require("expect");
 
 const { PlexClient, PlexAccount } = require("../index");
 
-const { startServer, stopServer, getLastRequest } = require("../server/index");
-before(startServer);
-after(stopServer);
-
 describe("account", () => {
-  it("logs in", async () => {
+  test("logs in", async () => {
     let client = new PlexClient({ plexWebURL: "http://localhost:3000/plex.tv/" });
     let account = await PlexAccount.login(client, "foo@bar.com", "bar");
     expect(account).not.toBeNull();
