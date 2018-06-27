@@ -9,7 +9,40 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/**
+ * PlexClient is the first class that any API callers must instantiate. It is
+ * responsible for holding details about the sort of device that is using the
+ * API. Different settings will cause Plex to respond differently, for example
+ * only certain product names will work for syncing.
+ */
 class PlexClient {
+  /**
+   * An optional options argument can be passed to override various defaults
+   * for the settings which have the following defaults:
+   * 
+   * product
+   *   "plex-client".
+   * version
+   *   plex-client's version.
+   * platform
+   *   The current OS.
+   * platformVersion
+   *   The current OS version.
+   * device
+   *   The current OS.
+   * name
+   *   The current hostname.
+   * uuid
+   *   A unique identified for the client, generated from the hostname.
+   * provides
+   *   An array of services the client provides.
+   * screenResolution
+   *   "1920x1080".
+   * screenDensity
+   *   undefined.
+   * 
+   * @param {object} options override the default options.
+   */
   constructor(options = {}) {
     Object.defineProperty(this, "options", {
       value: {},
@@ -32,6 +65,12 @@ class PlexClient {
     this.connection = new PlexConnection(this);
   }
 
+  /**
+   * Creates a new PlexClient but uses a set of defaults that makes it look like
+   * an Android client.
+   * 
+   * @param {object} options override options as described in the constructor.
+   */
   static Android(options = {}) {
     let finalOptions = Object.assign({}, {
       product: "Plex for Android",
@@ -47,6 +86,12 @@ class PlexClient {
     return new PlexClient(finalOptions);
   }
 
+  /**
+   * Creates a new PlexClient but uses a set of defaults that makes it look like
+   * a web browser client.
+   * 
+   * @param {object} options override options as described in the constructor.
+   */
   static WebBrowser(options = {}) {
     let finalOptions = Object.assign({}, {
       product: "Plex Web",
