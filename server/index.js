@@ -2,9 +2,12 @@ const path = require("path");
 const fs = require("fs");
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 let server;
 let lastRequest = null;
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(request, response, next) {
   lastRequest = request;
