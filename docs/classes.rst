@@ -5,3 +5,4 @@ Classes
    :hidden:
 
    PlexClient
+   PlexAccount
