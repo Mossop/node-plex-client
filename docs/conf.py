@@ -6,6 +6,13 @@
 # full list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+import os
+import json
+
+package_path = os.path.join(os.path.abspath('..'), 'package.json')
+f = open(package_path, 'r')
+package = json.loads(f.read())
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -19,14 +26,14 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'node-plex-client'
-copyright = u'2018, Dave Townsend'
-author = u'Dave Townsend'
+project = package['name']
+author = package['author']
+copyright = u"2018, %s" % author
 
 # The short X.Y version
-version = u''
+version = package['version']
 # The full version, including alpha/beta/rc tags
-release = u'0.1.0'
+release = package['version']
 
 
 # -- General configuration ---------------------------------------------------

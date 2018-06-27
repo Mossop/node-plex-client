@@ -1,5 +1,5 @@
 {
-  "name": "plex-client",
+  "name": "node-plex-client",
   "version": "0.1.0",
   "description": "APIs for a client application to access Plex media servers.",
   "main": "index.js",
