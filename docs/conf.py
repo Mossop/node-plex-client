@@ -9,7 +9,8 @@
 import os
 import json
 
-package_path = os.path.join(os.path.abspath('..'), 'package.json')
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+package_path = os.path.join(root_path, 'package.json')
 f = open(package_path, 'r')
 package = json.loads(f.read())
 
@@ -49,7 +50,7 @@ extensions = [
     'sphinx_js'
 ]
 primary_domain = 'js'
-js_source_path = 'api'
+js_source_path = os.path.join(root_path, 'api')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
