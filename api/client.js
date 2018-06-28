@@ -41,7 +41,7 @@ class PlexClient {
    * screenDensity
    *   undefined.
    * 
-   * @param {object} options override the default options.
+   * @param {Object} options override the default options.
    */
   constructor(options = {}) {
     Object.defineProperty(this, "options", {
@@ -69,7 +69,7 @@ class PlexClient {
    * Creates a new PlexClient but uses a set of defaults that makes it look like
    * an Android client.
    * 
-   * @param {object} options override options as described in the constructor.
+   * @param {Object} options override options as described in the constructor.
    */
   static Android(options = {}) {
     let finalOptions = Object.assign({}, {
@@ -90,7 +90,7 @@ class PlexClient {
    * Creates a new PlexClient but uses a set of defaults that makes it look like
    * a web browser client.
    * 
-   * @param {object} options override options as described in the constructor.
+   * @param {Object} options override options as described in the constructor.
    */
   static WebBrowser(options = {}) {
     let finalOptions = Object.assign({}, {

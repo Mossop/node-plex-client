@@ -21,8 +21,8 @@ class PlexAccount {
    * Logs in to a plex.tv account and returns a PlexAccount instance.
    * 
    * @param {PlexClient} client the client data to use to request login.
-   * @param {string} username the user's username.
-   * @param {string} password the user's password.
+   * @param {String} username the user's username.
+   * @param {String} password the user's password.
    * @returns {Promise<PlexAccount>} the account instance on success.
    */
   static async login(client, username, password) {
@@ -55,7 +55,7 @@ class PlexAccount {
    * Retrieves a PlexDevice for a recently used resource. This generally means
    * API clients that can be controlled or accessed in some way.
    * 
-   * @param {string} name the name of the device
+   * @param {String} name the name of the device
    * @returns {Promise<PlexDevice>} the device on success.
    */
   async getResource(name) {
@@ -74,8 +74,8 @@ class PlexAccount {
   /**
    * Retrieves a list of PlexDevice's that support the passed features.
    * 
-   * @param {Array<string>} provides a list of features the resource should support.
-   * @returns {Promise<Array<PlexDevice>>} a list of devices.
+   * @param {String[]} provides a list of features the resource should support.
+   * @returns {Promise<PlexDevice[]>} a list of devices.
    */
   async getResources(provides = []) {
     let connectPromises = [];
@@ -95,7 +95,7 @@ class PlexAccount {
   /**
    * A shortcut for getting the server resources.
    * 
-   * @returns {Promise<Array<PlexServer>>} a list of servers.
+   * @returns {Promise<PlexServer[]>} a list of servers.
    */
   getServers() {
     return this.getResources(["server"]);
