@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MediaContainer size="2">
   <Device name="Main Server" product="Plex Media Server" productVersion="1.13.2.5154-fd05be322" platform="Linux" platformVersion="4.4.0-128-generic (#154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018)" device="docker" clientIdentifier="3ac4753d0698c2fdea2d894e8ba50b37cf207509" createdAt="1450163127" lastSeenAt="1530123476" provides="server" owned="1" accessToken="HU4XNX3ggszgvyy4s4o" publicAddress="78.39.87.230" httpsRequired="0" synced="0" relay="1" publicAddressMatches="0" presence="1">
+    <Connection protocol="http" address="10.0.0.135" port="32400" uri="http://localhost:3000/remote/" local="0"/>
+    <Connection protocol="http" address="10.0.0.135" port="32400" uri="http://localhost:3000/relay/" relay="1"/>
     <Connection protocol="http" address="10.0.0.135" port="32400" uri="http://localhost:3000/mainserver/" local="1"/>
   </Device>
   <Device name="Second Server" product="Plex Media Server" productVersion="1.13.2.5154-fd05be322" platform="Linux" platformVersion="4.4.0-128-generic (#154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018)" device="docker" clientIdentifier="2ac4c53d0e98c2fdea2d894e8ba50b37cf267509" createdAt="1450163127" lastSeenAt="1530123476" provides="server" owned="1" accessToken="r4FfXdgggsgsyyeswo" publicAddress="78.39.87.230" httpsRequired="0" synced="0" relay="1" publicAddressMatches="0" presence="1">

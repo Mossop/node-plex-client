@@ -33,5 +33,8 @@ describe("server", () => {
     (await awaitExpect(async() => {
       await account.getResource("Phone");
     })).toThrow(/Unable to connect to device/);
+
+    let servers = await account.getServers();
+    expect(servers.length).toBe(2);
   });
 });
