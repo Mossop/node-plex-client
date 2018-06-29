@@ -13,14 +13,15 @@ describe("account", () => {
     expect(account.name).toBe("Dave Townsend");
     expect(account.email).toBe("foo@bar.com");
 
-    let request = getLastRequest();
-    expect(request.method).toBe("POST");
-    expect(request.body).toEqual({
+    let requests = getLastRequests();
+    expect(requests.length).toBe(1);
+    expect(requests[0].method).toBe("POST");
+    expect(requests[0].body).toEqual({
       login: "foo@bar.com",
       password: "bar",
     });
 
-    expect(request.get("X-Plex-Platform").toLowerCase()).toBe(os.platform());
-    expect(request.get("X-Plex-Token")).toBe(undefined);
+    expect(requests[0].get("X-Plex-Platform").toLowerCase()).toBe(os.platform());
+    expect(requests[0].get("X-Plex-Token")).toBe(undefined);
   });
 });

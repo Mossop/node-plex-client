@@ -16,14 +16,13 @@ function sortConnections(a, b) {
 }
 
 class PlexDevice extends PlexContainer {
-  constructor(connection, baseuri, data, resourceData) {
+  constructor(connection, baseuri, data) {
     super(connection, baseuri, data);
     this.device = this;
-    this.resourceData = resourceData;
   }
 
   get name() {
-    return this.data.attributes.friendlyName;
+    return this.data.friendlyName;
   }
 
   async getItem(uri) {
@@ -40,29 +39,22 @@ class PlexDevice extends PlexContainer {
   }
 
   static async connect(connection, resourceData) {
-    let cls = PlexDevice;
-    if (PlexDevice.checkProvides(resourceData.$.provides, ["server"])) {
-      cls = PlexServer;
-    } else if (PlexDevice.checkProvides(resourceData.$.provides, ["client"])) {
-      cls = PlexClient;
-    }
-
     let connections = resourceData.Connection.map(c => ({
-      uri: new URL(c.$.uri),
-      local: c.$.local == "1",
-      relay: c.$.relay == "1",
+      uri: new URL(c.uri),
+      local: c.local == "1",
+      relay: c.relay == "1",
     })).sort(sortConnections);
 
     for (let conn of connections) {
       try {
         let deviceData = await connection.getDevice(conn.uri);
-        return new cls(connection, conn.uri, deviceData.MediaContainer, resourceData);
+        return new PlexDevice(connection, conn.uri, deviceData.MediaContainer);
       } catch (e) {
         // Ignore failures to connect
       }
     }
 
-    throw new Error(`Unable to connect to device "${resourceData.$.name}".`);
+    throw new Error(`Unable to connect to device "${resourceData.name}".`);
   }
 
   static checkProvides(deviceProvides, provides = []) {

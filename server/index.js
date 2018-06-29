@@ -5,16 +5,31 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 let server;
-let lastRequest = null;
+let requests = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(function(request, response, next) {
-  lastRequest = request;
+  requests.push(request);
 
-  let file = path.join(__dirname, "files", ...request.path.split("/"));
+  let fullpath = request.path;
+  if (fullpath.endsWith("/")) {
+    fullpath += "index";
+  }
+
+  let file = path.join(__dirname, "files", ...fullpath.split("/"));
+  let headersFile = `${file}^headers^`;
   try {
-    let data = fs.readFileSync(file);
+    let headers = JSON.parse(fs.readFileSync(headersFile, { encoding: "utf8" }));
+    for (let name of Object.keys(headers)) {
+      response.set(name, headers[name]);
+    }
+  } catch (e) {
+    // Ignore file not found errors
+  }
+
+  try {
+    let data = fs.readFileSync(file, { encoding: "utf8" });
     response.status(200).send(data);
   } catch (e) {
     next();
@@ -33,12 +48,14 @@ function stopServer() {
   });
 }
 
-function getLastRequest() {
-  return lastRequest;
+function getLastRequests() {
+  let results = requests;
+  requests = [];
+  return results;
 }
 
 module.exports = {
   startServer,
   stopServer,
-  getLastRequest,
+  getLastRequests,
 };

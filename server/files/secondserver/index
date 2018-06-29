@@ -1,0 +1,174 @@
+{
+  "MediaContainer": {
+    "size": 24,
+    "allowCameraUpload": true,
+    "allowChannelAccess": true,
+    "allowMediaDeletion": true,
+    "allowSharing": true,
+    "allowSync": true,
+    "allowTuners": true,
+    "backgroundProcessing": true,
+    "companionProxy": true,
+    "countryCode": "usa",
+    "diagnostics": "logs,databases,streaminglogs",
+    "eventStream": true,
+    "friendlyName": "Second Server",
+    "hubSearch": true,
+    "itemClusters": true,
+    "livetv": 6,
+    "machineIdentifier": "2ac4c53d0e98c2fdea2d894e8ba50b37cf267509",
+    "mediaProviders": true,
+    "multiuser": true,
+    "myPlex": true,
+    "myPlexMappingState": "mapped",
+    "myPlexSigninState": "ok",
+    "myPlexSubscription": true,
+    "myPlexUsername": "foo@bar.com",
+    "ownerFeatures": "Android - PiP,adaptive_bitrate,camera_upload,cloudsync,collections,content_filter,download_certificates,dvr,federated-auth,hardware_transcoding,home,hwtranscode,item_clusters,livetv,loudness,lyrics,music_videos,news,pass,photo_autotags,photos-favorites,photos-metadata-edition,photos-v5,photosV6-edit,photosV6-tv-albums,premium_music_metadata,radio,session_bandwidth_restrictions,session_kick,sync,trailers,tuner-sharing,type-first,unsupportedtuners,webhooks",
+    "photoAutoTag": true,
+    "platform": "Linux",
+    "platformVersion": "4.4.0-128-generic (#154-Ubuntu SMP Fri May 25 14:15:18 UTC 2018)",
+    "pluginHost": true,
+    "readOnlyLibraries": false,
+    "requestParametersInCookie": true,
+    "streamingBrainABRVersion": 3,
+    "streamingBrainVersion": 2,
+    "sync": true,
+    "transcoderActiveVideoSessions": 0,
+    "transcoderAudio": true,
+    "transcoderLyrics": true,
+    "transcoderPhoto": true,
+    "transcoderSubtitles": true,
+    "transcoderVideo": true,
+    "transcoderVideoBitrates": "64,96,208,320,720,1500,2000,3000,4000,8000,10000,12000,20000",
+    "transcoderVideoQualities": "0,1,2,3,4,5,6,7,8,9,10,11,12",
+    "transcoderVideoResolutions": "128,128,160,240,320,480,768,720,720,1080,1080,1080,1080",
+    "updatedAt": 1530054608,
+    "updater": true,
+    "version": "1.13.2.5154-fd05be322",
+    "voiceSearch": true,
+    "Directory": [
+      {
+        "count": 1,
+        "key": "activities",
+        "title": "activities"
+      },
+      {
+        "count": 1,
+        "key": "butler",
+        "title": "butler"
+      },
+      {
+        "count": 1,
+        "key": "channels",
+        "title": "channels"
+      },
+      {
+        "count": 1,
+        "key": "clients",
+        "title": "clients"
+      },
+      {
+        "count": 1,
+        "key": "diagnostics",
+        "title": "diagnostics"
+      },
+      {
+        "count": 1,
+        "key": "hubs",
+        "title": "hubs"
+      },
+      {
+        "count": 1,
+        "key": "library",
+        "title": "library"
+      },
+      {
+        "count": 3,
+        "key": "livetv",
+        "title": "livetv"
+      },
+      {
+        "count": 3,
+        "key": "media",
+        "title": "media"
+      },
+      {
+        "count": 1,
+        "key": "music",
+        "title": "music"
+      },
+      {
+        "count": 1,
+        "key": "neighborhood",
+        "title": "neighborhood"
+      },
+      {
+        "count": 2,
+        "key": "photos",
+        "title": "photos"
+      },
+      {
+        "count": 1,
+        "key": "playQueues",
+        "title": "playQueues"
+      },
+      {
+        "count": 1,
+        "key": "player",
+        "title": "player"
+      },
+      {
+        "count": 1,
+        "key": "playlists",
+        "title": "playlists"
+      },
+      {
+        "count": 1,
+        "key": "resources",
+        "title": "resources"
+      },
+      {
+        "count": 1,
+        "key": "search",
+        "title": "search"
+      },
+      {
+        "count": 1,
+        "key": "server",
+        "title": "server",
+        "content": true
+      },
+      {
+        "count": 1,
+        "key": "servers",
+        "title": "servers"
+      },
+      {
+        "count": 1,
+        "key": "statistics",
+        "title": "statistics"
+      },
+      {
+        "count": 1,
+        "key": "system",
+        "title": "system"
+      },
+      {
+        "count": 1,
+        "key": "transcode",
+        "title": "transcode"
+      },
+      {
+        "count": 1,
+        "key": "updater",
+        "title": "updater"
+      },
+      {
+        "count": 4,
+        "key": "video",
+        "title": "video"
+      }
+    ]
+  }
+}

@@ -60,15 +60,15 @@ class PlexAccount {
    */
   async getResource(name) {
     let data = await this.connection.getResources();
-    for (let deviceData of data.elements.Device) {
-      if (deviceData.attributes.name != name) {
+    for (let deviceData of data.MediaContainer.Device) {
+      if (deviceData.name != name) {
         continue;
       }
 
       return PlexDevice.connect(this.connection, deviceData);
     }
 
-    return null;
+    throw new Error(`No resource named ${name}`);
   }
 
   /**
@@ -80,8 +80,8 @@ class PlexAccount {
   async getResources(provides = []) {
     let connectPromises = [];
     let data = await this.connection.getResources();
-    for (let deviceData of data.elements.Device) {
-      if (!PlexDevice.checkProvides(deviceData.attributes.provides, provides)) {
+    for (let deviceData of data.MediaContainer.Device) {
+      if (!PlexDevice.checkProvides(deviceData.provides, provides)) {
         continue;
       }
 

@@ -1,11 +1,12 @@
 const { URL } = require("url");
 
 const request = require("request-promise-native");
+const mimematch = require("mime-match");
 
 const parseXML = require("./xml");
 
 const PLEX_WEB_SIGNIN = "api/v2/users/signin";
-const PLEX_WEB_RESOURCES = "/api/resources?includeHttps=1&includeRelay=1";
+const PLEX_WEB_RESOURCES = "api/resources?includeHttps=1&includeRelay=1";
 const PLEX_URL_DEVICES = new URL("https://plex.tv/devices.xml");
 
 class PlexConnection {
@@ -60,7 +61,7 @@ class PlexConnection {
     });
 
     let body = response.body;
-    if (response.headers["content-type"] == "application/json") {
+    if (mimematch("application/json", response.headers["content-type"])) {
       body = JSON.parse(body);
     } else {
       body = await parseXML(body);
