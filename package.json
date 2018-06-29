@@ -4,7 +4,7 @@
   "description": "APIs for a client application to access Plex media servers.",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "nyc -s mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "sphinx-build -b html docs docs/_build"
   },
