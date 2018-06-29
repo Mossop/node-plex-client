@@ -6,3 +6,5 @@ Classes
 
    PlexClient
    PlexAccount
+   PlexDevice
+

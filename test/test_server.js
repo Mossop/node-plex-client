@@ -16,8 +16,13 @@ describe("server", () => {
     requests = getLastRequests();
     expect(requests.length).toBe(3);
     expect(requests[0].get("X-Plex-Token")).toBe("g2J4yh9G1qwdf292gZdE");
-    // ??
-    expect(requests[1].get("X-Plex-Token")).toBe("g2J4yh9G1qwdf292gZdE");
+    for (let i = 1; i < requests.length; i++) {
+      if (requests[i].path.startsWith("/mainserver/")) {
+        expect(requests[i].get("X-Plex-Token")).toBe("HU4XNX3ggszgvyy4s4o");
+      } else {
+        expect(requests[i].get("X-Plex-Token")).toBe("r4FfXdgggsgsyyeswo");
+      }
+    }
 
     resources = await account.getResources();
     expect(resources.length).toBe(2);
@@ -27,6 +32,6 @@ describe("server", () => {
 
     (await awaitExpect(async() => {
       await account.getResource("Phone");
-    })).toThrow();
+    })).toThrow(/Unable to connect to device/);
   });
 });

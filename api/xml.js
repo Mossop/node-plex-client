@@ -6,7 +6,7 @@ function parseXML(str) {
     let nodes = [root];
     let node = root;
 
-    let stream = sax.createStream(true);
+    let stream = sax.createStream(true, {});
     stream.on("opentag", ({ name, attributes }) => {
       let newNode = Object.assign({}, attributes);
 

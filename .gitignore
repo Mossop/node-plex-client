@@ -2,3 +2,4 @@ node_modules
 docs/_build
 test.js
 .DS_Store
+.nyc_output

@@ -1,60 +1,51 @@
-const { URL } = require("url");
-
 const PlexContainer = require("./container");
 
-function sortConnections(a, b) {
-  if (a.relay != b.relay) {
-    return a.relay ? 1 : -1;
-  }
-
-  if (a.local != b.local) {
-    return a.local ? -1 : 1;
-  }
-
-  return 0;
-}
-
+/**
+ * Represents a connected device. You can retrieve information and send commands
+ * to the device.
+ */
 class PlexDevice extends PlexContainer {
+  /**
+   * Creates a new PlexDevice. Generally you wouldn't use this directly, instead
+   * get a device from PlexAccount.getResource or call PlexDevice.connect.
+   * 
+   * @param {PlexConnection} connection the connection used to access the device.
+   * @param {URL} baseuri the URI to connect to the device.
+   * @param {Object} data data about the device.
+   */
   constructor(connection, baseuri, data) {
     super(connection, baseuri, data);
-    this.device = this;
   }
 
+  /**
+   * Returns the device name.
+   * 
+   * @returns {String}
+   */
   get name() {
-    return this.data.friendlyName;
+    return this._data.friendlyName;
   }
 
-  async getItem(uri) {
-    let data = this.connection.request(uri);
-    for (let prop of Object.keys(data)) {
-      for (let itemData of data[prop]) {
-        if (prop == "MediaContainer") {
-          let item = new PlexContainer(this.connection, uri, itemData);
-          return item;
-        }
-      }
-    }
+  /**
+   * Attempts to connect to a Plex device.
+   * 
+   * @param client the PlexClient to use to connect.
+   * @param {URL} baseuri the URI to connect to.
+   * @param {String} authToken the authentication token to use.
+   * @returns {Promise<PlexDevice>} the connected device on success.
+   */
+  static async connect(client, baseuri, authToken) {
+    let data = await client.connection.getContainer(baseuri, authToken);
+    return new PlexDevice(client.connection, baseuri, data.MediaContainer);
   }
 
-  static async connect(connection, resourceData) {
-    let connections = resourceData.Connection.map(c => ({
-      uri: new URL(c.uri),
-      local: c.local == "1",
-      relay: c.relay == "1",
-    })).sort(sortConnections);
-
-    for (let conn of connections) {
-      try {
-        let deviceData = await connection.getDevice(conn.uri);
-        return new PlexDevice(connection, conn.uri, deviceData.MediaContainer);
-      } catch (e) {
-        // Ignore failures to connect
-      }
-    }
-
-    throw new Error(`Unable to connect to device "${resourceData.name}".`);
-  }
-
+  /**
+   * A helper function to verify that the given provides data for a device
+   * matches the requirements.
+   * 
+   * @param {String} deviceProvides the device provides string.
+   * @param {String[]} provides the list of requirements.
+   */
   static checkProvides(deviceProvides, provides = []) {
     // Shortcut the empty case.
     if (provides.length == 0) {

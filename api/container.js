@@ -2,19 +2,19 @@ class PlexContainer {
   constructor(connection, baseuri, data) {
     this.connection = connection;
     this.baseuri = baseuri;
-    this.data = data;
+    this._data = data;
   }
 
   get name() {
-    return this.data.title || this.data.title1;
+    return this._data.title || this._data.title1;
   }
 
   get art() {
-    return this.data.art;
+    return this._data.art;
   }
 
   get thumb() {
-    return this.data.thumb;
+    return this._data.thumb;
   }
 }
 

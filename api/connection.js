@@ -7,7 +7,6 @@ const parseXML = require("./xml");
 
 const PLEX_WEB_SIGNIN = "api/v2/users/signin";
 const PLEX_WEB_RESOURCES = "api/resources?includeHttps=1&includeRelay=1";
-const PLEX_URL_DEVICES = new URL("https://plex.tv/devices.xml");
 
 class PlexConnection {
   constructor(client, token) {
@@ -33,10 +32,6 @@ class PlexConnection {
       headers["X-Plex-Sync-Version"] = "2";
     }
 
-    if (this.token) {
-      headers["X-Plex-Token"] = this.token;
-    }
-
     if (this.client.options.screenResolution) {
       headers["X-Plex-Device-Screen-Resolution"] = this.client.options.screenResolution;
     }
@@ -48,8 +43,11 @@ class PlexConnection {
     return headers;
   }
 
-  async request(url, { method = "GET", form = null } = {}) {
+  async request(url, { method = "GET", form = null, token = null } = {}) {
     let headers = this.getHeaders();
+    if (token) {
+      headers["X-Plex-Token"] = token;
+    }
 
     let response = await request({
       url: url.toString(),
@@ -72,26 +70,21 @@ class PlexConnection {
   async getAccount(username, password) {
     let url = new URL(PLEX_WEB_SIGNIN, this.client.options.plexWebURL);
     let result = await this.request(url, { method: "POST", form: { login: username, password }});
-    this.token = result.authToken;
     return result;
   }
 
-  getResources() {
+  getResources(token) {
     let url = new URL(PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
-    return this.request(url);
+    return this.request(url, { token });
   }
 
-  getDevices() {
-    return this.request(PLEX_URL_DEVICES);
+  getContainer(baseuri, token) {
+    return this.request(baseuri, { token });
   }
 
-  getDevice(baseuri) {
-    return this.request(baseuri);
-  }
-
-  getSyncStatus(baseuri) {
+  getSyncStatus(baseuri, token) {
     let url = new URL(`/sync/${this.client.options.uuid}/status`, baseuri);
-    return this.request(url);
+    return this.request(url, { token });
   }
 }
 
