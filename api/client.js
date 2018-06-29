@@ -1,8 +1,8 @@
 const os = require("os");
+const path = require("path");
 const crypto = require("crypto");
 const { URL } = require("url");
 
-const pkg = require("../package.json");
 const PlexConnection = require("./connection");
 
 function capitalize(str) {
@@ -44,11 +44,13 @@ class PlexClient {
    * @param {Object} options override the default options.
    */
   constructor(options = {}) {
-    Object.defineProperty(this, "options", {
-      value: {},
-    });
+    let pkg = {};
+    if (!("product" in options) || !("version" in options)) {
+      let pkgpath = path.resolve(__dirname, "..", "package.json");
+      pkg = JSON.parse(require("fs").readFileSync(pkgpath, { encoding: "utf8" }));
+    }
 
-    Object.assign(this.options, {
+    this.options = Object.assign({}, {
       product: pkg.name,
       version: pkg.version,
       platform: capitalize(os.platform()),

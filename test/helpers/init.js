@@ -2,7 +2,7 @@ const expect = require("expect");
 
 const { startServer, stopServer, getLastRequests } = require("../../server/index");
 
-global.test = (descr, testfn) => {
+module.exports.test = (descr, testfn) => {
   it(descr, async() => {
     await startServer();
     try {
@@ -13,8 +13,8 @@ global.test = (descr, testfn) => {
   });
 };
 
-global.getLastRequests = getLastRequests;
-global.awaitExpect = async function(func) {
+module.exports.getLastRequests = getLastRequests;
+module.exports.awaitExpect = async function(func) {
   try {
     let result = await(func());
     return expect(() => result);

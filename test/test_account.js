@@ -2,6 +2,7 @@ const os = require("os");
 
 const expect = require("expect");
 
+const { test, getLastRequests } = require("./helpers/init");
 const { PlexClient, PlexAccount } = require("../index");
 
 describe("account", () => {

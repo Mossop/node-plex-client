@@ -1,7 +1,6 @@
 const { URL } = require("url");
 
-const { PlexDirectory, PlexContainer } = require("./container");
-const { PlexSyncItem } = require("./sync");
+const PlexContainer = require("./container");
 
 function sortConnections(a, b) {
   if (a.relay != b.relay) {
@@ -31,7 +30,6 @@ class PlexDevice extends PlexContainer {
       for (let itemData of data[prop]) {
         if (prop == "MediaContainer") {
           let item = new PlexContainer(this.connection, uri, itemData);
-          item.device = this;
           return item;
         }
       }
@@ -74,7 +72,7 @@ class PlexDevice extends PlexContainer {
   }
 }
 
-class PlexServer extends PlexDevice {
+/*class PlexServer extends PlexDevice {
   get library() {
     return new PlexDirectory(this.connection, this.baseuri, {
       attributes: {
@@ -91,6 +89,6 @@ class PlexServer extends PlexDevice {
 }
 
 class PlexClient extends PlexDevice {
-}
+}*/
 
 module.exports = PlexDevice;

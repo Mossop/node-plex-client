@@ -95,7 +95,7 @@ class PlexAccount {
   /**
    * A shortcut for getting the server resources.
    * 
-   * @returns {Promise<PlexServer[]>} a list of servers.
+   * @returns {Promise<PlexDevice[]>} a list of servers.
    */
   getServers() {
     return this.getResources(["server"]);

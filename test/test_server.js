@@ -1,5 +1,6 @@
 const expect = require("expect");
 
+const { test, getLastRequests, awaitExpect } = require("./helpers/init");
 const { PlexClient, PlexAccount } = require("../index");
 
 describe("server", () => {
