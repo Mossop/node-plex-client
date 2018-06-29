@@ -1,6 +1,8 @@
+const { URL } = require("url");
+
+const API = require("./api");
 const PlexDevice = require("./device");
 const PlexClient = require("./client");
-const PlexConnection = require("./connection");
 
 /**
  * Sorts potential connections in order of preferences. Prefers local
@@ -62,11 +64,11 @@ class PlexAccount {
    * This is an internal class and should not be instantiated directly. Instead
    * use PlexAccount.login to create an instance.
    * 
-   * @param {PlexConnection} connection the connection info to use for API calls.
+   * @param {PlexClient} client the connection info to use for API calls.
    * @param {*} data the parsed data for the account.
    */
-  constructor(connection, data) {
-    this.connection = connection;
+  constructor(client, data) {
+    this.client = client;
     this._data = data;
   }
 
@@ -79,8 +81,9 @@ class PlexAccount {
    * @returns {Promise<PlexAccount>} the account instance on success.
    */
   static async login(client, username, password) {
-    let data = await client.connection.getAccount(username, password);
-    return new PlexAccount(client.connection, data);
+    let url = new URL(API.PLEX_WEB_SIGNIN, client.options.plexWebURL);
+    let data = await client.request(url, { method: "POST", form: { login: username, password }});
+    return new PlexAccount(client, data);
   }
 
   /**
@@ -112,13 +115,14 @@ class PlexAccount {
    * @returns {Promise<PlexDevice>} the device on success.
    */
   async getResource(name) {
-    let data = await this.connection.getResources(this._data.authToken);
+    let url = new URL(API.PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
+    let data = await this.client.request(url, { token: this._data.authToken });
     for (let deviceData of data.MediaContainer.Device) {
       if (deviceData.name != name) {
         continue;
       }
 
-      return await connectDevice(this.connection.client, deviceData, this._data.authToken);
+      return await connectDevice(this.client, deviceData, this._data.authToken);
     }
 
     throw new Error(`No resource named ${name}`);
@@ -132,13 +136,14 @@ class PlexAccount {
    */
   async getResources(provides = []) {
     let connectPromises = [];
-    let data = await this.connection.getResources(this._data.authToken);
+    let url = new URL(API.PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
+    let data = await this.client.request(url, { token: this._data.authToken });
     for (let deviceData of data.MediaContainer.Device) {
       if (!PlexDevice.checkProvides(deviceData.provides, provides)) {
         continue;
       }
 
-      connectPromises.push(connectDevice(this.connection.client, deviceData, this._data.authToken).catch(() => null));
+      connectPromises.push(connectDevice(this.client, deviceData, this._data.authToken).catch(() => null));
     }
 
     let connections = await Promise.all(connectPromises);

@@ -1,8 +1,9 @@
 class PlexContainer {
-  constructor(connection, baseuri, data) {
-    this.connection = connection;
+  constructor(client, baseuri, data) {
+    this.client = client;
     this.baseuri = baseuri;
     this._data = data;
+    this.device = null;
   }
 
   get name() {

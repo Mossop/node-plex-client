@@ -3,7 +3,10 @@ const path = require("path");
 const crypto = require("crypto");
 const { URL } = require("url");
 
-const PlexConnection = require("./connection");
+const request = require("request-promise-native");
+const MIMEType = require("whatwg-mimetype");
+
+const parseXML = require("./xml");
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -64,7 +67,6 @@ class PlexClient {
     }, options);
 
     Object.freeze(this.options);
-    this.connection = new PlexConnection(this);
   }
 
   /**
@@ -105,6 +107,77 @@ class PlexClient {
     }, options);
 
     return new PlexClient(finalOptions);
+  }
+
+  /**
+   * Returns the headers to associate with any request to a Plex API.
+   * 
+   * @returns {Object.<String, String>} a map of header name to value.
+   */
+  getHeaders() {
+    let headers = {
+      "Accept": "application/json, text/javascript, */*; q=0.01",
+      "X-Plex-Platform": this.options.platform,
+      "X-Plex-Platform-Version": this.options.platformVersion,
+      "X-Plex-Provides": this.options.provides.join(","),
+      "X-Plex-Product": this.options.product,
+      "X-Plex-Version": this.options.version,
+      "X-Plex-Device": this.options.device,
+      "X-Plex-Device-Name": this.options.name,
+      "X-Plex-Client-Identifier": this.options.uuid,
+      "X-Plex-Client-Platform": this.options.platform,
+    };
+
+    if (this.options.provides.includes("sync-target")) {
+      headers["X-Plex-Sync-Version"] = "2";
+    }
+
+    if (this.options.screenResolution) {
+      headers["X-Plex-Device-Screen-Resolution"] = this.options.screenResolution;
+    }
+
+    if (this.options.screenDensity) {
+      headers["X-Plex-Device-Screen-Density"] = this.options.screenDensity;
+    }
+
+    return headers;
+  }
+
+  /**
+   * Makes a request to a Plex service and parses the response from JSON or XML
+   * into a JS object.
+   * 
+   * @typedef {Object} RequestOptions
+   * @property {string=} method the HTTP request method to use.
+   * @property {Object=} form the form parameters to send.
+   * @property {string=} token the authentication token to send.
+   * @param {URL} url the url to request.
+   * @param {RequestOptions} options options for the request.
+   * @returns {Promise<Object>} the parsed data returned on success.
+   */
+  async request(url, { method = "GET", form = null, token = null } = {}) {
+    let headers = this.getHeaders();
+    if (token) {
+      headers["X-Plex-Token"] = token;
+    }
+
+    let response = await request({
+      url: url.toString(),
+      resolveWithFullResponse: true,
+      headers,
+      form,
+      method,
+      timeout: 2000,
+    });
+
+    let body = response.body;
+    let mimetype = MIMEType.parse(response.headers["content-type"]);
+    if (mimetype && mimetype.essence == "application/json") {
+      body = JSON.parse(body);
+    } else {
+      body = await parseXML(body);
+    }
+    return body;
   }
 }
 
