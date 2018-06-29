@@ -1,7 +1,7 @@
 const { URL } = require("url");
 
 const request = require("request-promise-native");
-const mimematch = require("mime-match");
+const MIMEType = require("whatwg-mimetype");
 
 const parseXML = require("./xml");
 
@@ -59,7 +59,8 @@ class PlexConnection {
     });
 
     let body = response.body;
-    if (mimematch("application/json", response.headers["content-type"])) {
+    let mimetype = MIMEType.parse(response.headers["content-type"]);
+    if (mimetype && mimetype.essence == "application/json") {
       body = JSON.parse(body);
     } else {
       body = await parseXML(body);

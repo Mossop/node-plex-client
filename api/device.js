@@ -1,4 +1,5 @@
 const PlexContainer = require("./container");
+const PlexConnection = require("./connection");
 
 /**
  * Represents a connected device. You can retrieve information and send commands

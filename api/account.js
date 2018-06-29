@@ -1,4 +1,6 @@
 const PlexDevice = require("./device");
+const PlexClient = require("./client");
+const PlexConnection = require("./connection");
 
 /**
  * Sorts potential connections in order of preferences. Prefers local
