@@ -1,5 +1,12 @@
 const sax = require("sax");
 
+/**
+ * Parses some XML string into a JS object in a similar style to that used by
+ * Plex elsewhere.
+ * 
+ * @param {String} str the XML string to parse.
+ * @returns {Promise<Object>} a JS object on success.
+ */
 function parseXML(str) {
   return new Promise((resolve, reject) => {
     let root = { };

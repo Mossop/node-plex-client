@@ -88,6 +88,8 @@ class PlexAccount {
 
   /**
    * The username associated with the account.
+   * 
+   * @returns {String} the username.
    */
   get username() {
     return this._data.username;
@@ -95,6 +97,8 @@ class PlexAccount {
 
   /**
    * The name associated with the account.
+   * 
+   * @returns {String} the name.
    */
   get name() {
     return this._data.title;
@@ -102,6 +106,8 @@ class PlexAccount {
 
   /**
    * The email address associated with the account.
+   * 
+   * @returns {String} the email.
    */
   get email() {
     return this._data.email;
