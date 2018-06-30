@@ -53,7 +53,7 @@ class PlexClient {
       pkg = JSON.parse(require("fs").readFileSync(pkgpath, { encoding: "utf8" }));
     }
 
-    this.options = Object.assign({}, {
+    this._options = Object.assign({}, {
       product: pkg.name,
       version: pkg.version,
       platform: capitalize(os.platform()),
@@ -66,7 +66,7 @@ class PlexClient {
       plexWebURL: new URL("https://plex.tv/")
     }, options);
 
-    Object.freeze(this.options);
+    Object.freeze(this._options);
   }
 
   /**
@@ -117,27 +117,27 @@ class PlexClient {
   getHeaders() {
     let headers = {
       "Accept": "application/json, text/javascript, */*; q=0.01",
-      "X-Plex-Platform": this.options.platform,
-      "X-Plex-Platform-Version": this.options.platformVersion,
-      "X-Plex-Provides": this.options.provides.join(","),
-      "X-Plex-Product": this.options.product,
-      "X-Plex-Version": this.options.version,
-      "X-Plex-Device": this.options.device,
-      "X-Plex-Device-Name": this.options.name,
-      "X-Plex-Client-Identifier": this.options.uuid,
-      "X-Plex-Client-Platform": this.options.platform,
+      "X-Plex-Platform": this._options.platform,
+      "X-Plex-Platform-Version": this._options.platformVersion,
+      "X-Plex-Provides": this._options.provides.join(","),
+      "X-Plex-Product": this._options.product,
+      "X-Plex-Version": this._options.version,
+      "X-Plex-Device": this._options.device,
+      "X-Plex-Device-Name": this._options.name,
+      "X-Plex-Client-Identifier": this._options.uuid,
+      "X-Plex-Client-Platform": this._options.platform,
     };
 
-    if (this.options.provides.includes("sync-target")) {
+    if (this._options.provides.includes("sync-target")) {
       headers["X-Plex-Sync-Version"] = "2";
     }
 
-    if (this.options.screenResolution) {
-      headers["X-Plex-Device-Screen-Resolution"] = this.options.screenResolution;
+    if (this._options.screenResolution) {
+      headers["X-Plex-Device-Screen-Resolution"] = this._options.screenResolution;
     }
 
-    if (this.options.screenDensity) {
-      headers["X-Plex-Device-Screen-Density"] = this.options.screenDensity;
+    if (this._options.screenDensity) {
+      headers["X-Plex-Device-Screen-Density"] = this._options.screenDensity;
     }
 
     return headers;

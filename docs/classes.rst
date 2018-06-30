@@ -7,4 +7,4 @@ Classes
    PlexClient
    PlexAccount
    PlexDevice
-
+   PlexContainer

@@ -1,4 +1,4 @@
-const PlexClient = require("./client");
+const { URL } = require("url");
 
 /**
  * The basic building block for the Plex API. Almost everything in Plex is a
@@ -10,15 +10,13 @@ class PlexContainer {
    * Do not construct this manually, instead get a PlexDevice which is an
    * instance of PlexContainer and then use it to browse the device's contents.
    * 
-   * @param {PlexClient} client the client used to retrieve the container.
-   * @param {String} baseuri the URI representing the container.
+   * @param {URL} baseuri the URI representing the container.
    * @param {Object} data the container's data.
    */
-  constructor(client, baseuri, data) {
-    this.client = client;
-    this.baseuri = baseuri;
+  constructor(baseuri, data) {
+    this._baseuri = baseuri;
     this._data = data;
-    this.device = null;
+    this._device = null;
   }
 
   /**
@@ -36,7 +34,7 @@ class PlexContainer {
    * @returns {URL} the URL to the image.
    */
   get art() {
-    return new URL(this._data.art, this.baseuri);
+    return new URL(this._data.art, this._baseuri);
   }
 
   /**
@@ -45,7 +43,26 @@ class PlexContainer {
    * @returns {URL} the URL to the image.
    */
   get thumb() {
-    return new URL(this._data.thumb, this.baseuri);
+    return new URL(this._data.thumb, this._baseuri);
+  }
+
+  /**
+   * Retrieves the contents of this container
+   */
+  async getContents() {
+    // Plex's URL handling is bogus.
+    let base = this._baseuri.toString();
+    if (!base.endsWith("/")) {
+      base += "/";
+    }
+
+    let results = [];
+    for (let dir of this._data.Directory) {
+      let url = new URL(dir.key, base);
+      results.push(this._device.loadItem(url).catch(() => null));
+    }
+
+    return (await Promise.all(results)).filter(c => c);
   }
 }
 

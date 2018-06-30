@@ -68,7 +68,7 @@ class PlexAccount {
    * @param {*} data the parsed data for the account.
    */
   constructor(client, data) {
-    this.client = client;
+    this._client = client;
     this._data = data;
   }
 
@@ -81,7 +81,7 @@ class PlexAccount {
    * @returns {Promise<PlexAccount>} the account instance on success.
    */
   static async login(client, username, password) {
-    let url = new URL(API.PLEX_WEB_SIGNIN, client.options.plexWebURL);
+    let url = new URL(API.PLEX_WEB_SIGNIN, client._options.plexWebURL);
     let data = await client.request(url, { method: "POST", form: { login: username, password }});
     return new PlexAccount(client, data);
   }
@@ -121,14 +121,14 @@ class PlexAccount {
    * @returns {Promise<PlexDevice>} the device on success.
    */
   async getResource(name) {
-    let url = new URL(API.PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
-    let data = await this.client.request(url, { token: this._data.authToken });
+    let url = new URL(API.PLEX_WEB_RESOURCES, this._client._options.plexWebURL);
+    let data = await this._client.request(url, { token: this._data.authToken });
     for (let deviceData of data.MediaContainer.Device) {
       if (deviceData.name != name) {
         continue;
       }
 
-      return await connectDevice(this.client, deviceData, this._data.authToken);
+      return await connectDevice(this._client, deviceData, this._data.authToken);
     }
 
     throw new Error(`No resource named ${name}`);
@@ -142,14 +142,14 @@ class PlexAccount {
    */
   async getResources(provides = []) {
     let connectPromises = [];
-    let url = new URL(API.PLEX_WEB_RESOURCES, this.client.options.plexWebURL);
-    let data = await this.client.request(url, { token: this._data.authToken });
+    let url = new URL(API.PLEX_WEB_RESOURCES, this._client._options.plexWebURL);
+    let data = await this._client.request(url, { token: this._data.authToken });
     for (let deviceData of data.MediaContainer.Device) {
       if (!PlexDevice.checkProvides(deviceData.provides, provides)) {
         continue;
       }
 
-      connectPromises.push(connectDevice(this.client, deviceData, this._data.authToken).catch(() => null));
+      connectPromises.push(connectDevice(this._client, deviceData, this._data.authToken).catch(() => null));
     }
 
     let connections = await Promise.all(connectPromises);

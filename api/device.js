@@ -1,9 +1,12 @@
+const { URL } = require("url");
+
 const PlexContainer = require("./container");
 const PlexClient = require("./client");
 
 /**
  * Represents a connected device. You can retrieve information and send commands
- * to the device.
+ * to the device. PlexDevice is an instance of PlexContainer which allows
+ * browsing the device's contents.
  */
 class PlexDevice extends PlexContainer {
   /**
@@ -16,9 +19,10 @@ class PlexDevice extends PlexContainer {
    * @param {Object} data data about the device.
    */
   constructor(client, baseuri, token, data) {
-    super(client, baseuri, data);
-    this.token = token;
-    this.device = this;
+    super(baseuri, data);
+    this._client = client;
+    this._token = token;
+    this._device = this;
   }
 
   /**
@@ -28,6 +32,17 @@ class PlexDevice extends PlexContainer {
    */
   get name() {
     return this._data.friendlyName;
+  }
+
+  async loadItem(url) {
+    let data = await this._client.request(url, { token: this._token });
+    if ("MediaContainer" in data) {
+      let container = new PlexContainer(url, data.MediaContainer);
+      container._device = this;
+      return container;
+    } else {
+      throw new Error(`Unexpected response: ${Object.keys(data)[0]}`);
+    }
   }
 
   /**
