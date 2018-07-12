@@ -19,10 +19,14 @@ class PlexDevice extends PlexContainer {
    * @param {Object} data data about the device.
    */
   constructor(client, baseuri, token, data) {
-    super(baseuri, data);
+    super(null, "/", data);
     this._client = client;
+    this._baseuri = baseuri;
     this._token = token;
-    this._device = this;
+  }
+
+  get id() {
+    return this._data.machineIdentifier;
   }
 
   /**
@@ -34,15 +38,15 @@ class PlexDevice extends PlexContainer {
     return this._data.friendlyName;
   }
 
-  async loadItem(url) {
-    let data = await this._client.request(url, { token: this._token });
-    if ("MediaContainer" in data) {
-      let container = new PlexContainer(url, data.MediaContainer);
-      container._device = this;
-      return container;
-    } else {
-      throw new Error(`Unexpected response: ${Object.keys(data)[0]}`);
-    }
+  /**
+   * Loads a Plex item's data. Normally only called internally.
+   * 
+   * @param {String} path the item's path.
+   * @returns {Promise<Object>} the item data requested on success.
+   */
+  async _loadItemData(path) {
+    let url = new URL(path, this._baseuri);
+    return await this._client.request(url, { token: this._token });
   }
 
   /**

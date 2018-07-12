@@ -1,5 +1,7 @@
 const { URL } = require("url");
 
+const Registry = require("./registry");
+
 /**
  * The basic building block for the Plex API. Almost everything in Plex is a
  * MediaContainer filled with items. This class allows retrieving information
@@ -10,13 +12,22 @@ class PlexContainer {
    * Do not construct this manually, instead get a PlexDevice which is an
    * instance of PlexContainer and then use it to browse the device's contents.
    * 
-   * @param {URL} baseuri the URI representing the container.
+   * @param {String} path the path to this container container.
    * @param {Object} data the container's data.
    */
-  constructor(baseuri, data) {
-    this._baseuri = baseuri;
+  constructor(device, path, data) {
+    this._device = device || this;
+    this._path = path;
     this._data = data;
-    this._device = null;
+  }
+
+  /**
+   * Gets the path identifying this container. Always starts and ends with a '/'.
+   * 
+   * @returns {String} the path.
+   */
+  get path() {
+    return this._path;
   }
 
   /**
@@ -25,6 +36,9 @@ class PlexContainer {
    * @returns {String} the name.
    */
   get name() {
+    if (this._data.title2) {
+      return `${this._data.title1} - ${this._data.title2}`;
+    }
     return this._data.title || this._data.title1;
   }
 
@@ -34,7 +48,10 @@ class PlexContainer {
    * @returns {URL} the URL to the image.
    */
   get art() {
-    return new URL(this._data.art, this._baseuri);
+    if (this._data.art) {
+      return new URL(this._data.art, this._device._baseuri);
+    }
+    return null;
   }
 
   /**
@@ -43,23 +60,33 @@ class PlexContainer {
    * @returns {URL} the URL to the image.
    */
   get thumb() {
-    return new URL(this._data.thumb, this._baseuri);
+    if (this._data.thumb) {
+      return new URL(this._data.thumb, this._device._baseuri);
+    }
+    return null;
   }
 
   /**
    * Retrieves the contents of this container
    */
   async getContents() {
-    // Plex's URL handling is bogus.
-    let base = this._baseuri.toString();
-    if (!base.endsWith("/")) {
-      base += "/";
-    }
-
     let results = [];
-    for (let dir of this._data.Directory) {
-      let url = new URL(dir.key, base);
-      results.push(this._device.loadItem(url).catch(() => null));
+    for (let type of Registry.types) {
+      if (!(type in this._data)) {
+        continue;
+      }
+
+      for (let itemData of this._data[type]) {
+        let path = this._path + itemData.key + "/";
+        results.push((async() => {
+          try {
+            let data = await this._device._loadItemData(path);
+            return Registry.createItem(type, this._device, path, itemData, data);
+          } catch (e) {
+            return null;
+          }
+        })());
+      }
     }
 
     return (await Promise.all(results)).filter(c => c);
