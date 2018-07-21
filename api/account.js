@@ -46,7 +46,13 @@ async function connectDevice(client, resourceData, backupToken) {
   let token = resourceData.accessToken || backupToken;
   for (let conn of connections) {
     try {
-      return await PlexDevice.connect(client, conn.uri, token);
+      let device = await PlexDevice.connect(client, conn.uri, token);
+
+      // For some reason some players advertise their server's connection info.
+      // Not sure what to do here other than refuse to connect in that case.
+      if (device.id == resourceData.clientIdentifier) {
+        return device;
+      }
     } catch (e) {
       // Ignore failures to connect
     }
