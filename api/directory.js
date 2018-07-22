@@ -11,7 +11,7 @@ class PlexDirectory extends PlexContainer {
   }
 
   static create(device, path, sourceData, data) {
-    return new PlexDirectory(device, path, sourceData, data);
+    return new PlexDirectory(device, path, sourceData, data.MediaContainer);
   }
 }
 
