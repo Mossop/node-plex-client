@@ -18,4 +18,6 @@ const Registry = {
   }
 };
 
+Registry.register("Directory", require("./directory"));
+
 module.exports = Registry;

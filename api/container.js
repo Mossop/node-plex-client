@@ -1,7 +1,4 @@
-const { URL } = require("url");
-
 const PlexItem = require("./item");
-const Registry = require("./registry");
 
 /**
  * Many things in Plex are considered to be MediaContainers. This class allows
@@ -12,6 +9,8 @@ class PlexContainer extends PlexItem {
    * Retrieves the contents of this container
    */
   async getContents() {
+    const Registry = require("./registry");
+
     let results = [];
     for (let type of Registry.types) {
       if (!(type in this._data)) {
