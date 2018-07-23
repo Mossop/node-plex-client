@@ -6,18 +6,38 @@ const PlexContainer = require("./container");
  * different types as necessary.
  */
 class PlexMetadata extends PlexItem {
+  /**
+   * Gets the height of this media item.
+   * 
+   * @returns {Number} the media's height.
+   */
   get height() {
     return this._data.Media[0].height;
   }
 
+  /**
+   * Gets the width of this media item.
+   * 
+   * @returns {Number} the media's width.
+   */
   get width() {
     return this._data.Media[0].width;
   }
 
+  /**
+   * Gets the aspect ratio of this media item.
+   * 
+   * @returns {Number} the media's aspect ratio.
+   */
   get aspectRatio() {
     return this._data.Media[0].aspectRatio;
   }
 
+  /**
+   * Gets the container of this media item.
+   * 
+   * @returns {String} the media's container.
+   */
   get container() {
     return this._data.Media[0].container;
   }
@@ -41,9 +61,30 @@ class PlexMovie extends PlexMetadata {
 }
 
 class PlexEpisode extends PlexMetadata {
+  /**
+   * Gets the expected thumbnail aspect ratio.
+   * 
+   * @returns {Number} the thumbnail's aspect ratio.
+   */
+  get thumbAspectRatio() {
+    return this.aspectRatio;
+  }
 }
 
 class PlexPhoto extends PlexMetadata {
+  /**
+   * Gets the expected thumbnail aspect ratio.
+   * 
+   * @returns {Number} the thumbnail's aspect ratio.
+   */
+  get thumbAspectRatio() {
+    return this.aspectRatio;
+  }
 }
 
-module.exports = PlexMetadata;
+module.exports = {
+  PlexMetadata,
+  PlexMovie,
+  PlexEpisode,
+  PlexPhoto,
+};

@@ -77,6 +77,15 @@ class PlexItem {
     }
     return null;
   }
+
+  /**
+   * Gets the expected thumbnail aspect ratio.
+   * 
+   * @returns {Number} the thumbnail's aspect ratio.
+   */
+  get thumbAspectRatio() {
+    return 254 / 382;
+  }
 }
 
 module.exports = PlexItem;

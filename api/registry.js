@@ -20,6 +20,6 @@ const Registry = {
 
 Registry.register("Directory", require("./directory"));
 Registry.register("Hub", require("./hub"));
-Registry.register("Metadata", require("./metadata"));
+Registry.register("Metadata", require("./metadata").PlexMetadata);
 
 module.exports = Registry;
