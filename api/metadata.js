@@ -5,14 +5,21 @@ const PlexContainer = require("./container");
  * Most media is represented by the Metadata object. We split it out into
  * different types as necessary.
  */
-class PlexMetadata extends PlexContainer {
-  /**
-   * Gets the item's name.
-   * 
-   * @returns {String} the name.
-   */
-  get name() {
-    return this._sourceData.title;
+class PlexMetadata extends PlexItem {
+  get height() {
+    return this._data.Media[0].height;
+  }
+
+  get width() {
+    return this._data.Media[0].width;
+  }
+
+  get aspectRatio() {
+    return this._data.Media[0].aspectRatio;
+  }
+
+  get container() {
+    return this._data.Media[0].container;
   }
 
   static create(device, path, data, sourceData) {
@@ -26,17 +33,17 @@ class PlexMetadata extends PlexContainer {
         return new PlexPhoto(device, path, data.MediaContainer.Metadata[0], sourceData);
       }
     }
-    return new PlexMetadata(device, path, data.MediaContainer, sourceData);
+    return new PlexContainer(device, path, data.MediaContainer, sourceData);
   }
 }
 
-class PlexMovie extends PlexItem {
+class PlexMovie extends PlexMetadata {
 }
 
-class PlexEpisode extends PlexItem {
+class PlexEpisode extends PlexMetadata {
 }
 
-class PlexPhoto extends PlexItem {
+class PlexPhoto extends PlexMetadata {
 }
 
 module.exports = PlexMetadata;
