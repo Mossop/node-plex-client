@@ -39,6 +39,19 @@ class PlexDevice extends PlexContainer {
   }
 
   /**
+   * Gets a URL including any necessary authentication tokens that can be
+   * accessed directly.
+   * 
+   * @param {String} path the path to be accessed.
+   * @returns {URL} a URL that can be loaded to access the data.
+   */
+  _getURL(path) {
+    let url = new URL(path, this._baseuri);
+    url.searchParams.set("X-Plex-Token", this._token);
+    return url;
+  }
+
+  /**
    * Loads a Plex item's data. Normally only called internally.
    * 
    * @param {String} path the item's path.

@@ -49,7 +49,7 @@ class PlexContainer {
    */
   get art() {
     if (this._data.art) {
-      return new URL(this._data.art, this._device._baseuri);
+      return this._device._getURL(this._data.art);
     }
     return null;
   }
@@ -61,7 +61,7 @@ class PlexContainer {
    */
   get thumb() {
     if (this._data.thumb) {
-      return new URL(this._data.thumb, this._device._baseuri);
+      return this._device._getURL(this._data.thumb);
     }
     return null;
   }
