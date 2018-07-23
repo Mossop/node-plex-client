@@ -12,13 +12,11 @@ class PlexItem {
    * @param {PlexDevice} device the device that owns this item or null if this is the device.
    * @param {String} path the path to this item.
    * @param {Object} data the item's data.
-   * @param {Object} sourceData the item's data as returned by its parent API object.
    */
-  constructor(device, path, data, sourceData = null) {
+  constructor(device, path, data) {
     this._device = device || this;
     this._path = path;
     this._data = data;
-    this._sourceData = sourceData;
   }
 
   /**
@@ -45,7 +43,7 @@ class PlexItem {
    * @returns {String} the name.
    */
   get name() {
-    return this._sourceData ? this._sourceData.title : this._data.title || this._data.title1;
+    return this._data.title || this._data.title1;
   }
 
   /**
@@ -56,9 +54,6 @@ class PlexItem {
   get art() {
     if (this._data.art) {
       return this._device._getURL(this._data.art);
-    }
-    if (this._sourceData && this._sourceData.art) {
-      return this._device._getURL(this._sourceData.art);
     }
     return null;
   }
@@ -71,9 +66,6 @@ class PlexItem {
   get thumb() {
     if (this._data.thumb) {
       return this._device._getURL(this._data.thumb);
-    }
-    if (this._sourceData && this._sourceData.thumb) {
-      return this._device._getURL(this._sourceData.thumb);
     }
     return null;
   }

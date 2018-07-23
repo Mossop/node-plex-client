@@ -1,9 +1,43 @@
 const PlexItem = require("./item");
 
-async function createItem(Registry, type, device, path, itemData) {
+function mergeArray(itemArray, sourceArray) {
+  function mergeIn(sourceItem) {
+    let prop = ["key", "id"].find(p => p in sourceItem);
+    if (!prop) {
+      console.error("Unable to find a property to match against.", sourceItem);
+    }
+
+    for (let item of itemArray) {
+      if (item[prop] == sourceItem[prop]) {
+        mergeData(item, sourceItem);
+        return;
+      }
+    }
+
+    itemArray.push(sourceItem);
+  }
+
+  sourceArray.forEach(mergeIn);
+}
+
+function mergeData(itemData, sourceData) {
+  for (let key of Object.keys(sourceData)) {
+    if (!(key in itemData)) {
+      itemData[key] = sourceData[key];
+      continue;
+    }
+
+    if (Array.isArray(itemData[key]) && Array.isArray(sourceData[key])) {
+      mergeArray(itemData[key], sourceData[key]);
+    }
+  }
+}
+
+async function createItem(Registry, type, device, path, sourceData) {
   try {
-    let data = await device._loadItemData(path);
-    return Registry.createItem(type, device, path, data, itemData);
+    let data = (await device._loadItemData(path)).MediaContainer;
+    mergeData(data, sourceData);
+    return Registry.createItem(type, device, path, data);
   } catch (e) {
     return null;
   }
@@ -28,15 +62,15 @@ class PlexContainer extends PlexItem {
         continue;
       }
 
-      for (let itemData of this._data[type]) {
+      for (let sourceData of this._data[type]) {
         let path = this._path;
-        if (itemData.key.startsWith("/")) {
-          path = itemData.key + "/";
+        if (sourceData.key.startsWith("/")) {
+          path = sourceData.key + "/";
         } else {
-          path += itemData.key + "/";
+          path += sourceData.key + "/";
         }
 
-        results.push(createItem(Registry, type, this._device, path, itemData));
+        results.push(createItem(Registry, type, this._device, path, sourceData));
       }
     }
 

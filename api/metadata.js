@@ -42,18 +42,18 @@ class PlexMetadata extends PlexItem {
     return this._data.Media[0].container;
   }
 
-  static create(device, path, data, sourceData) {
-    if ("Media" in sourceData) {
-      switch (sourceData.type) {
+  static create(device, path, data) {
+    if ("Media" in data) {
+      switch (data.type) {
       case "movie":
-        return new PlexMovie(device, path, data.MediaContainer.Metadata[0], sourceData);
+        return new PlexMovie(device, path, data.Metadata[0]);
       case "episode":
-        return new PlexEpisode(device, path, data.MediaContainer.Metadata[0], sourceData);
+        return new PlexEpisode(device, path, data.Metadata[0]);
       case "photo":
-        return new PlexPhoto(device, path, data.MediaContainer.Metadata[0], sourceData);
+        return new PlexPhoto(device, path, data.Metadata[0]);
       }
     }
-    return new PlexContainer(device, path, data.MediaContainer, sourceData);
+    return new PlexContainer(device, path, data);
   }
 }
 

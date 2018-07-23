@@ -1,12 +1,12 @@
 const Registry = {
   _map: new Map(),
 
-  async createItem(type, device, path, data, sourceData) {
+  async createItem(type, device, path, data) {
     let cls = this._map.get(type);
     if (!cls) {
       throw new Error(`Unexpected Plex item "${type}"`);
     }
-    return cls.create(device, path, data, sourceData);
+    return cls.create(device, path, data);
   },
 
   register(type, cls) {
