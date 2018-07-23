@@ -68,6 +68,10 @@ class PlexDevice extends PlexContainer {
    * @param {TranscodeOptions} options options for transcoding
    */
   transcodeImage(url, options) {
+    if (!options.width || !options.height) {
+      throw new Error("Both 'width' and 'height' options must be specified.");
+    }
+
     const parameters = [
       "height",
       "width",
