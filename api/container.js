@@ -22,6 +22,15 @@ class PlexContainer {
   }
 
   /**
+   * Gets the device owning this container.
+   * 
+   * @returns {PlexDevice} the device.
+   */
+  get device() {
+    return this._device;
+  }
+
+  /**
    * Gets the path identifying this container. Always starts and ends with a '/'.
    * 
    * @returns {String} the path.

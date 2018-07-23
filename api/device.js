@@ -52,6 +52,52 @@ class PlexDevice extends PlexContainer {
   }
 
   /**
+   * Returns a URL that when retrieved transcodes the original image, normally
+   * altering its size, though other effects are available.
+   * 
+   * @typedef {Object} TranscodeOptions
+   * @property {Number} height the desired height.
+   * @property {Number} width the desired width.
+   * @property {Number} minSize ???.
+   * @property {String} format the image format (png or jpg).
+   * @property {Number} opacity opacity of the image, 0-100.
+   * @property {String} background html color for a background when not fully opaque.
+   * @property {Number} blur how much to blur the image.
+   * @property {Number} upscale whether to upscale the image.
+   * @param {URL} url the URL of the image to transcode.
+   * @param {TranscodeOptions} options options for transcoding
+   */
+  transcodeImage(url, options) {
+    const parameters = [
+      "height",
+      "width",
+      "minSize",
+      "format",
+      "opacity",
+      "background",
+      "blur",
+      "upscale",
+    ];
+
+    let path = url.toString();
+    let baseuri = this._baseuri.toString();
+    if (path.startsWith(baseuri)) {
+      path = path.substring(baseuri.length - 1);
+    }
+
+    let transcoded = new URL("/photo/:/transcode", this._baseuri);
+    transcoded.searchParams.set("url", path);
+    transcoded.searchParams.set("X-Plex-Token", this._token);
+    for (let param of parameters) {
+      if (param in options) {
+        transcoded.searchParams.set(param, options[param]);
+      }
+    }
+
+    return transcoded;
+  }
+
+  /**
    * Loads a Plex item's data. Normally only called internally.
    * 
    * @param {String} path the item's path.
