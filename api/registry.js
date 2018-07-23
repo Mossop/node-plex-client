@@ -19,6 +19,7 @@ const Registry = {
 };
 
 Registry.register("Directory", require("./directory"));
+Registry.register("Hub", require("./hub"));
 Registry.register("Metadata", require("./metadata"));
 
 module.exports = Registry;
