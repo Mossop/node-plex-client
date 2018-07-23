@@ -56,8 +56,8 @@ class PlexDevice extends PlexContainer {
    * altering its size, though other effects are available.
    * 
    * @typedef {Object} TranscodeOptions
-   * @property {Number} height the desired height.
-   * @property {Number} width the desired width.
+   * @property {Number} height the desired maximum height.
+   * @property {Number} width the desired maximum width.
    * @property {Number} minSize ???.
    * @property {String} format the image format (png or jpg).
    * @property {Number} opacity opacity of the image, 0-100.
