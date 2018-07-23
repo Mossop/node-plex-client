@@ -12,11 +12,13 @@ class PlexItem {
    * @param {PlexDevice} device the device that owns this item or null if this is the device.
    * @param {String} path the path to this item.
    * @param {Object} data the item's data.
+   * @param {Object} sourceData the item's data as returned by its parent API object.
    */
-  constructor(device, path, data) {
+  constructor(device, path, data, sourceData = null) {
     this._device = device || this;
     this._path = path;
     this._data = data;
+    this._sourceData = sourceData;
   }
 
   /**
