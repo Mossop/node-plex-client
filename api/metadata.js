@@ -1,3 +1,4 @@
+const PlexItem = require("./item");
 const PlexContainer = require("./container");
 
 /**
@@ -15,8 +16,27 @@ class PlexMetadata extends PlexContainer {
   }
 
   static create(device, path, data, sourceData) {
+    if ("Media" in sourceData) {
+      switch (sourceData.type) {
+      case "movie":
+        return new PlexMovie(device, path, data.MediaContainer.Metadata[0], sourceData);
+      case "episode":
+        return new PlexEpisode(device, path, data.MediaContainer.Metadata[0], sourceData);
+      case "photo":
+        return new PlexPhoto(device, path, data.MediaContainer.Metadata[0], sourceData);
+      }
+    }
     return new PlexMetadata(device, path, data.MediaContainer, sourceData);
   }
+}
+
+class PlexMovie extends PlexItem {
+}
+
+class PlexEpisode extends PlexItem {
+}
+
+class PlexPhoto extends PlexItem {
 }
 
 module.exports = PlexMetadata;
