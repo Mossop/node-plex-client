@@ -16,6 +16,8 @@ async function createItem(Registry, type, device, path, itemData) {
 class PlexContainer extends PlexItem {
   /**
    * Retrieves the contents of this container
+   * 
+   * @returns {Promise<PlexItem[]>} the container's contents.
    */
   async getContents() {
     const Registry = require("./registry");

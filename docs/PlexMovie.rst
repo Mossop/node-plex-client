@@ -1,0 +1,4 @@
+PlexMovie
+=========
+
+.. autoclass:: PlexMovie

@@ -7,4 +7,9 @@ Classes
    PlexClient
    PlexAccount
    PlexDevice
+   PlexItem
    PlexContainer
+   PlexMetadata
+   PlexMovie
+   PlexEpisode
+   PlexPhoto

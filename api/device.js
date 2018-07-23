@@ -25,6 +25,11 @@ class PlexDevice extends PlexContainer {
     this._token = token;
   }
 
+  /**
+   * Returns the device ID.
+   * 
+   * @returns {String} the ID.
+   */
   get id() {
     return this._data.machineIdentifier;
   }
@@ -32,7 +37,7 @@ class PlexDevice extends PlexContainer {
   /**
    * Returns the device name.
    * 
-   * @returns {String}
+   * @returns {String} the name.
    */
   get name() {
     return this._data.friendlyName;

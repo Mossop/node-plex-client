@@ -2,4 +2,4 @@ PlexContainer
 =============
 
 .. autoclass:: PlexContainer
-   :members: art, thumb
+   :members: getContents

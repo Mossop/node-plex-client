@@ -57,9 +57,15 @@ class PlexMetadata extends PlexItem {
   }
 }
 
+/**
+ * Represents a movie.
+ */
 class PlexMovie extends PlexMetadata {
 }
 
+/**
+ * Represents a TV episode.
+ */
 class PlexEpisode extends PlexMetadata {
   /**
    * Gets the expected thumbnail aspect ratio.
@@ -71,6 +77,9 @@ class PlexEpisode extends PlexMetadata {
   }
 }
 
+/**
+ * Represents a photo.
+ */
 class PlexPhoto extends PlexMetadata {
   /**
    * Gets the expected thumbnail aspect ratio.

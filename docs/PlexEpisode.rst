@@ -1,0 +1,4 @@
+PlexEpisode
+===========
+
+.. autoclass:: PlexEpisode

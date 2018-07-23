@@ -2,4 +2,4 @@ PlexDevice
 ==========
 
 .. autoclass:: PlexDevice
-   :members: name, connect
+   :members: connect, id, transcodeImage
